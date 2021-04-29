@@ -10,7 +10,7 @@ using WebApi_Projekt.Models;
 
 namespace WebApi_Projekt.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/geo-comments")]
     [ApiController]
     public class GeoMessagesController : ControllerBase
     {
@@ -21,14 +21,14 @@ namespace WebApi_Projekt.Controllers
             _context = context;
         }
 
-        // GET: api/GeoMessages
+        // GET: api/v1/geo-comments
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GeoMessage>>> GetGeoMessages()
         {
             return await _context.GeoMessages.ToListAsync();
         }
 
-        // GET: api/GeoMessages/5
+        // GET: api/v1/geo-comments/1
         [HttpGet("{id}")]
         public async Task<ActionResult<GeoMessage>> GetGeoMessage(int id)
         {
@@ -43,11 +43,12 @@ namespace WebApi_Projekt.Controllers
         }
 
 
-        // POST: api/GeoMessages
+        // POST: api/v1/geo-comments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<GeoMessage>> PostGeoMessage(GeoMessage geoMessage)
+        [HttpPost("{message}/{longitude}/{latitude}")]
+        public async Task<ActionResult<GeoMessage>> PostGeoMessage(string message, double longitude, double latitude)
         {
+            GeoMessage geoMessage = new GeoMessage { Message = message, Longitude = longitude, Latitude = latitude };
             _context.GeoMessages.Add(geoMessage);
             await _context.SaveChangesAsync();
 
