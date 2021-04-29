@@ -28,6 +28,8 @@ namespace WebApi_Projekt.Controllers
             return await _context.GeoMessages.ToListAsync();
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         // GET: api/v1/geo-comments/1
         [HttpGet("{id}")]
         public async Task<ActionResult<GeoMessage>> GetGeoMessage(int id)
@@ -39,7 +41,7 @@ namespace WebApi_Projekt.Controllers
                 return NotFound();
             }
 
-            return geoMessage;
+            return Ok(geoMessage);
         }
 
 
