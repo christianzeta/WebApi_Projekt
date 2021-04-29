@@ -7,9 +7,9 @@ namespace WebApi_Projekt.Models
 {
     public class GeoMessage
     {
-        int Id { get; set; }
-        string Message { get; set; }
-        double Longitude { get; set; }
-        double Latitude { get; set; }
+        public int Id { get; set; }
+        public string Message { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
     }
 }
