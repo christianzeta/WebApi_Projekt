@@ -47,10 +47,9 @@ namespace WebApi_Projekt.Controllers
 
         // POST: api/v1/geo-comments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("{message}/{longitude}/{latitude}")]
-        public async Task<ActionResult<GeoMessage>> PostGeoMessage(string message, double longitude, double latitude)
+        [HttpPost]
+        public async Task<ActionResult<GeoMessage>> PostGeoMessage([FromBody]GeoMessage geoMessage)
         {
-            GeoMessage geoMessage = new GeoMessage { Message = message, Longitude = longitude, Latitude = latitude };
             _context.GeoMessages.Add(geoMessage);
             await _context.SaveChangesAsync();
 
