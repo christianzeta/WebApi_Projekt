@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi_Projekt.Data;
+using WebApi_Projekt.Models;
 
 namespace WebApi_Projekt
 {
@@ -37,6 +38,9 @@ namespace WebApi_Projekt
             });
             services.AddDbContext<Context>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DbConn")));
+
+            services.AddDefaultIdentity<MyUser>(options =>
+            options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<Context>();
 
             services.AddAuthentication("MyAuthScheme")
                 .AddScheme<AuthenticationSchemeOptions, AuthenticationHandler>("MyAuthScheme", null);
