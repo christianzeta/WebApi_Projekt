@@ -121,9 +121,23 @@ namespace v2
 
         // GET: api/v1/geo-comments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GeoMessageV2Get>>> GetGeoMessages()
+        public async Task<ActionResult<IEnumerable<GeoMessageV2Get>>> GetGeoMessages([FromQuery]double minLon, double minLat, double maxLon, double maxLat)
         {
-            var geoMessage = await _context.GeoMessages.ToListAsync();
+            List<GeoMessage> geoMessage = new List<GeoMessage>();
+            
+            if (minLon != 0 && minLat != 0 && maxLat != 0 && maxLon != 0)
+            {
+                geoMessage = await _context.GeoMessages
+                    .Where(min => min.Longitude > minLon)
+                    .Where(max => max.Longitude < maxLon)
+                    .Where(min => min.Latitude > minLat)
+                    .Where(max => max.Latitude < maxLat)
+                    .ToListAsync();
+            }
+            else
+            {
+                geoMessage = await _context.GeoMessages.ToListAsync();
+            }
 
             List<GeoMessageV2Get> geoMessageV2List = new List<GeoMessageV2Get>();
             foreach (var message in geoMessage)
@@ -172,6 +186,23 @@ namespace v2
             
 
             return Ok(geoMessageV2);
+        }
+
+        // POST: api/v2/geo-comments
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<GeoMessage>> PostGeoMessage([FromBody] GeoMessage geoMessage)
+        {
+            Request.Query.TryGetValue("token", out var potentialToken);
+            var user = _context.Users.Where(u => u.Token == potentialToken).FirstOrDefault();
+
+            geoMessage.Author = user.FirstName;
+
+            _context.GeoMessages.Add(geoMessage);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetGeoMessage", new { id = geoMessage.Id }, geoMessage);
         }
 
         public class GeoMessageV2
