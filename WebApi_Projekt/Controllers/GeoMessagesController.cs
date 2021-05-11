@@ -119,6 +119,33 @@ namespace v2
             _context = context;
         }
 
+        // GET: api/v1/geo-comments
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<GeoMessageV2Get>>> GetGeoMessages()
+        {
+            var geoMessage = await _context.GeoMessages.ToListAsync();
+
+            List<GeoMessageV2Get> geoMessageV2List = new List<GeoMessageV2Get>();
+            foreach (var message in geoMessage)
+            {
+                GeoMessageV2Get geoMessageV2Get = new GeoMessageV2Get
+                {
+                    Id = message.Id,
+                    Message = new Message
+                    {
+                        Title = message.Title,
+                        Body = message.Body,
+                        Author = message.Author
+                    },
+                    Latitude = message.Latitude,
+                    Longitude = message.Longitude
+                };
+                geoMessageV2List.Add(geoMessageV2Get);
+            }
+
+            return geoMessageV2List;
+        }
+
         // GET: api/v2/geo-comments/1
         [HttpGet("{id}")]
         public async Task<ActionResult<GeoMessageV2Get>> GetGeoMessage(int id)
@@ -133,7 +160,7 @@ namespace v2
             GeoMessageV2Get geoMessageV2 = new GeoMessageV2Get
             {
                 Id = geoMessage.Id,
-                Message = { 
+                Message = new Message { 
                     Title = geoMessage.Title,
                     Body = geoMessage.Body,
                     Author = geoMessage.Author
@@ -141,6 +168,8 @@ namespace v2
                 Latitude = geoMessage.Latitude,
                 Longitude = geoMessage.Longitude
             };
+
+            
 
             return Ok(geoMessageV2);
         }
