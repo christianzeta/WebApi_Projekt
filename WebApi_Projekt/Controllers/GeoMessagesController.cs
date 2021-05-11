@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApi_Projekt.Data;
@@ -17,6 +18,7 @@ namespace v1
     public class GeoMessagesController : ControllerBase
     {
         private readonly Context _context;
+
 
         public GeoMessagesController(Context context)
         {
@@ -113,10 +115,12 @@ namespace v2
     public class GeoMessagesController : ControllerBase
     {
         private readonly Context _context;
+        private readonly UserManager<MyUser> _userManager;
 
-        public GeoMessagesController(Context context)
+        public GeoMessagesController(Context context, UserManager<MyUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/v1/geo-comments
@@ -194,10 +198,8 @@ namespace v2
         [HttpPost]
         public async Task<ActionResult<GeoMessage>> PostGeoMessage([FromBody] GeoMessage geoMessage)
         {
-            Request.Query.TryGetValue("token", out var potentialToken);
-            var user = _context.Users.Where(u => u.Token == potentialToken).FirstOrDefault();
 
-            geoMessage.Author = user.FirstName;
+            geoMessage.Author = _userManager.GetUserName(User);
 
             _context.GeoMessages.Add(geoMessage);
             await _context.SaveChangesAsync();

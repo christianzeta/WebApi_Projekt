@@ -36,11 +36,21 @@ namespace WebApi_Projekt
             }
 
             string token = potentialToken.ToString();
-            // kollar om keyn stämmer med apiKey
-            if (_context.MyUsers.FirstOrDefault(t=>t.Token == token) != null)
+
+            // kollar om en user har keyn och plockar ut den isåfall
+            var user = _context.MyUsers.FirstOrDefault(t => t.Token == token);
+
+
+
+            if (user != null)
             {
                 // annars lyckas resultatet
-                var identity = new ClaimsIdentity(Scheme.Name);
+                var claims = new List<Claim> {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.FirstName),
+                };
+
+                var identity = new ClaimsIdentity(claims, Scheme.Name);
                 var principal = new ClaimsPrincipal(identity);
                 var ticket = new AuthenticationTicket(principal, Scheme.Name);
 
