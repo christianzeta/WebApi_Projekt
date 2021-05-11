@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApi_Projekt.Data;
 using WebApi_Projekt.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace v1
 {
@@ -113,10 +114,12 @@ namespace v2
     public class GeoMessagesController : ControllerBase
     {
         private readonly Context _context;
+        private readonly UserManager<MyUser> _userManager;
 
-        public GeoMessagesController(Context context)
+        public GeoMessagesController(Context context, UserManager<MyUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/v1/geo-comments
@@ -197,7 +200,7 @@ namespace v2
 
             var geoMessagePost = new GeoMessage
             {
-                Author = "",
+                Author = _userManager.GetUserName(User),
                 Title = geoMessage.Message.Title,
                 Body = geoMessage.Message.Body,
                 Longitude = geoMessage.Longitude,
