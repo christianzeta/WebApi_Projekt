@@ -121,10 +121,10 @@ namespace v2
 
         // GET: api/v1/geo-comments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GeoMessageV2Get>>> GetGeoMessages([FromQuery]double minLon, double minLat, double maxLon, double maxLat)
+        public async Task<ActionResult<IEnumerable<GeoMessageV2Get>>> GetGeoMessages([FromQuery] double minLon, double minLat, double maxLon, double maxLat)
         {
             List<GeoMessage> geoMessage = new List<GeoMessage>();
-            
+
             if (minLon != 0 && minLat != 0 && maxLat != 0 && maxLon != 0)
             {
                 geoMessage = await _context.GeoMessages
@@ -174,7 +174,7 @@ namespace v2
             GeoMessageV2Get geoMessageV2 = new GeoMessageV2Get
             {
                 Id = geoMessage.Id,
-                Message = new Message { 
+                Message = new Message {
                     Title = geoMessage.Title,
                     Body = geoMessage.Body,
                     Author = geoMessage.Author
@@ -183,7 +183,7 @@ namespace v2
                 Longitude = geoMessage.Longitude
             };
 
-            
+
 
             return Ok(geoMessageV2);
         }
@@ -192,17 +192,35 @@ namespace v2
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<GeoMessage>> PostGeoMessage([FromBody] GeoMessage geoMessage)
+        public async Task<ActionResult<GeoMessageV2Post>> PostGeoMessage([FromBody] GeoMessageV2Post geoMessage)
         {
-            Request.Query.TryGetValue("token", out var potentialToken);
-            var user = _context.Users.Where(u => u.Token == potentialToken).FirstOrDefault();
 
-            geoMessage.Author = user.FirstName;
+            var geoMessagePost = new GeoMessage
+            {
+                Author = "",
+                Title = geoMessage.Message.Title,
+                Body = geoMessage.Message.Body,
+                Longitude = geoMessage.Longitude,
+                Latitude = geoMessage.Latitude
+            };
 
-            _context.GeoMessages.Add(geoMessage);
+            _context.GeoMessages.Add(geoMessagePost);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetGeoMessage", new { id = geoMessage.Id }, geoMessage);
+            return CreatedAtAction("GetGeoMessage", new { id = geoMessagePost.Id }, geoMessage);
+        }
+
+        public class GeoMessageV2Post
+        {
+            public MessagePost Message {get; set;}
+            public double Longitude { get; set; }
+            public double Latitude { get; set; }
+        }
+
+        public class MessagePost
+        {
+            public string Body { get; set; }
+            public string Title { get; set; }
         }
 
         public class GeoMessageV2
@@ -219,9 +237,12 @@ namespace v2
             public string Author { get; set; }
         }
 
+
         public class GeoMessageV2Get : GeoMessageV2 
         { 
             public int Id { get; set; }
         }
+
+
     }
 }
