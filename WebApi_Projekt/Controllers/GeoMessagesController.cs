@@ -118,5 +118,50 @@ namespace v2
         {
             _context = context;
         }
+
+        // GET: api/v2/geo-comments/1
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GeoMessageV2Get>> GetGeoMessage(int id)
+        {
+            var geoMessage = await _context.GeoMessages.FindAsync(id);
+
+            if (geoMessage == null)
+            {
+                return NotFound();
+            }
+
+            GeoMessageV2Get geoMessageV2 = new GeoMessageV2Get
+            {
+                Id = geoMessage.Id,
+                Message = { 
+                    Title = geoMessage.Title,
+                    Body = geoMessage.Body,
+                    Author = geoMessage.Author
+                },
+                Latitude = geoMessage.Latitude,
+                Longitude = geoMessage.Longitude
+            };
+
+            return Ok(geoMessageV2);
+        }
+
+        public class GeoMessageV2
+        {
+            public Message Message { get; set; }
+            public double Longitude { get; set; }
+            public double Latitude { get; set; }
+        }
+
+        public class Message
+        {
+            public string Body { get; set; }
+            public string Title { get; set; }
+            public string Author { get; set; }
+        }
+
+        public class GeoMessageV2Get : GeoMessageV2 
+        { 
+            public int Id { get; set; }
+        }
     }
 }

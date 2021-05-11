@@ -46,8 +46,8 @@ namespace WebApi_Projekt
             });
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi_Projekt", Version = "v1" });
-                c.SwaggerDoc("v2", new OpenApiInfo { Title = "WebApi_Projekt", Version = "v2" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi_Projekt", Version = "v1.0" });
+                c.SwaggerDoc("v2", new OpenApiInfo { Title = "WebApi_Projekt", Version = "v2.0" });
             });
             services.AddDbContext<Context>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DbConn")));
@@ -66,8 +66,8 @@ namespace WebApi_Projekt
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi_Projekt v1"));
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v2/swagger.json", "WebApi_Projekt v2"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi_Projekt v1.0"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v2/swagger.json", "WebApi_Projekt v2.0"));
             }
 
             app.UseHttpsRedirection();
