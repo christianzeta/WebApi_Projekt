@@ -33,7 +33,7 @@ namespace WebApi_Projekt.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         // GET: api/v1/geo-comments/1
         [HttpGet("{id}")]
-        public async Task<ActionResult<GeoMessage>> GetGeoMessage(int id)
+        public async Task<ActionResult<GeoMessageV1Get>> GetGeoMessage(int id)
         {
             var geoMessage = await _context.GeoMessages.FindAsync(id);
 
@@ -42,7 +42,15 @@ namespace WebApi_Projekt.Controllers
                 return NotFound();
             }
 
-            return Ok(geoMessage);
+            GeoMessageV1 geoMessageV1Get = new GeoMessageV1Get
+            {
+                Id = geoMessage.Id,
+                Message = geoMessage.Body,
+                Latitude = geoMessage.Latitude,
+                Longitude = geoMessage.Longitude
+            };
+
+            return Ok(geoMessageV1Get);
         }
 
 
@@ -72,6 +80,11 @@ namespace WebApi_Projekt.Controllers
             public string Message { get; set; }
             public double Longitude { get; set; }
             public double Latitude { get; set; }
+        }
+
+        public class GeoMessageV1Get : GeoMessageV1
+        {
+            public int Id { get; set; }
         }
 
         
