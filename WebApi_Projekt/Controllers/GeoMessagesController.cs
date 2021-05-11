@@ -9,10 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using WebApi_Projekt.Data;
 using WebApi_Projekt.Models;
 
-namespace WebApi_Projekt.Controllers
+namespace v1
 {
-    [Route("api/v1/geo-comments")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/geo-comments")]
     public class GeoMessagesController : ControllerBase
     {
         private readonly Context _context;
@@ -101,9 +102,21 @@ namespace WebApi_Projekt.Controllers
         {
             public int Id { get; set; }
         }
+    }
+}
 
-        
+namespace v2
+{
+    [ApiController]
+    [ApiVersion("2.0")]
+    [Route("api/v{version:apiVersion}/geo-comments")]
+    public class GeoMessagesController : ControllerBase
+    {
+        private readonly Context _context;
 
-
+        public GeoMessagesController(Context context)
+        {
+            _context = context;
+        }
     }
 }
