@@ -24,9 +24,24 @@ namespace WebApi_Projekt.Controllers
 
         // GET: api/v1/geo-comments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GeoMessage>>> GetGeoMessages()
+        public async Task<ActionResult<IEnumerable<GeoMessageV1Get>>> GetGeoMessages()
         {
-            return await _context.GeoMessages.ToListAsync();
+            var geoMessage = await _context.GeoMessages.ToListAsync();
+
+            List<GeoMessageV1Get> geoMessageV1List = new List<GeoMessageV1Get>();
+            foreach (var message in geoMessage)
+            {
+                GeoMessageV1Get geoMessageV1Get = new GeoMessageV1Get
+                {
+                    Id = message.Id,
+                    Message = message.Body,
+                    Latitude = message.Latitude,
+                    Longitude = message.Longitude
+                };
+                geoMessageV1List.Add(geoMessageV1Get);
+            }
+
+            return geoMessageV1List;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
