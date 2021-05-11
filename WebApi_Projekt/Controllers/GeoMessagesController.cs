@@ -50,12 +50,32 @@ namespace WebApi_Projekt.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<GeoMessage>> PostGeoMessage([FromBody]GeoMessage geoMessage)
+        public async Task<ActionResult<GeoMessageV1>> PostGeoMessage([FromBody]GeoMessageV1 geoMessageV1)
         {
+            GeoMessage geoMessage = new GeoMessage
+            {
+                Body = geoMessageV1.Message,
+                Author = null,
+                Title = null,
+                Longitude = geoMessageV1.Longitude,
+                Latitude = geoMessageV1.Latitude,
+            };
+
             _context.GeoMessages.Add(geoMessage);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetGeoMessage", new { id = geoMessage.Id }, geoMessage);
         }
+
+        public class GeoMessageV1
+        {
+            public string Message { get; set; }
+            public double Longitude { get; set; }
+            public double Latitude { get; set; }
+        }
+
+        
+
+
     }
 }
