@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebApi_Projekt</name>
+    </assembly>
+    <members>
+        <member name="M:v1.GeoMessagesController.GetGeoMessages">
+            <summary>
+            Ger alla GeoMessages som användare har lagt in.
+            </summary>
+            <returns> Returnerar alla GeoMessages </returns>
+        </member>
+        <member name="M:v1.GeoMessagesController.GetGeoMessage(System.Int32)">
+            <summary>
+            Ger en specifik geo-comment
+            </summary>
+            <param name="id">
+            <para>Heltal för att identifiera vilken geo-comment</para>
+            </param>
+            <returns>returnerar en specifik geo-comment</returns>
+        </member>
+        <member name="M:v1.GeoMessagesController.PostGeoMessage(v1.GeoMessagesController.GeoMessageV1)">
+            <summary>
+            Lägger till en geocomment på ett specifikt ställe
+            </summary>
+            <param name="geoMessageV1">
+                <para> En geomessage för version 1</para>
+            </param>
+            <returns> Returnerar ifall posten lyckas</returns>
+        </member>
+        <member name="M:v2.GeoMessagesController.GetGeoMessages(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Hämtar alla Geomessages, om användaren skriver in de 4 parametrarna i queryn så får man alla inom det området.
+            Om inte alla 4 Parametrar anges, så returnerar responset alla Geo-comments istället.
+            </summary>
+            <param name="minLon"><para>Minsta värdet för longitud, Decimaltal</para></param>
+            <param name="minLat"><para>Minsta värdet för latitud, Decimaltal</para></param>
+            <param name="maxLon"><para>Högsta värdet för longitud, Decimaltal</para></param>
+            <param name="maxLat"><para>Högsta värdet för latitud, Decimaltal</para></param>
+            <returns> Returnerar alla geo-comments eller alla inom ett bestämt område</returns>
+        </member>
+        <member name="M:v2.GeoMessagesController.GetGeoMessage(System.Int32)">
+            <summary>
+            Ger en specifik geo-comment
+            </summary>
+            <param name="id">
+            <para>Heltal för att identifiera vilken geo-comment</para>
+            </param>
+            <returns>returnerar en specifik geo-comment</returns>
+        </member>
+        <member name="M:v2.GeoMessagesController.PostGeoMessage(v2.GeoMessagesController.GeoMessageV2Post)">
+            <summary>
+            Lägger till en Geo-comment, som sätter Author till vilken användare som lägger till den
+            </summary>
+            <param name="geoMessage">
+            <para> Objekt för geoMessage </para>
+            </param>
+            <returns>Returnerar svar om det lyckades</returns>
+        </member>
+    </members>
+</doc>

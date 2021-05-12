@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi_Projekt.Data;
@@ -48,6 +49,8 @@ namespace WebApi_Projekt
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi_Projekt", Version = "v1.0" });
                 c.SwaggerDoc("v2", new OpenApiInfo { Title = "WebApi_Projekt", Version = "v2.0" });
+                var path = Path.Combine(AppContext.BaseDirectory, "Documentation.xml");
+                c.IncludeXmlComments(path);
             });
             services.AddDbContext<Context>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DbConn")));
