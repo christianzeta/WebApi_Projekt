@@ -12,6 +12,7 @@ using WebApi_Projekt.Models;
 
 namespace v1
 {
+
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/geo-comments")]
@@ -25,6 +26,11 @@ namespace v1
             _context = context;
         }
 
+
+        /// <summary>
+        /// Ger alla GeoMessages som användare har lagt in.
+        /// </summary>
+        /// <returns> Returnerar alla GeoMessages </returns>
         // GET: api/v1/geo-comments
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GeoMessageV1Get>>> GetGeoMessages()
@@ -47,6 +53,13 @@ namespace v1
             return geoMessageV1List;
         }
 
+        /// <summary>
+        /// Ger en specifik geo-comment
+        /// </summary>
+        /// <param name="id">
+        /// <para>Heltal för att identifiera vilken geo-comment</para>
+        /// </param>
+        /// <returns>returnerar en specifik geo-comment</returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         // GET: api/v1/geo-comments/1
@@ -71,7 +84,13 @@ namespace v1
             return Ok(geoMessageV1Get);
         }
 
-
+        /// <summary>
+        /// Lägger till en geocomment på ett specifikt ställe
+        /// </summary>
+        /// <param name="geoMessageV1">
+        ///     <para> En geomessage för version 1</para>
+        /// </param>
+        /// <returns> Returnerar ifall posten lyckas</returns>
         // POST: api/v1/geo-comments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize]
@@ -123,6 +142,15 @@ namespace v2
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Hämtar alla Geomessages, om användaren skriver in de 4 parametrarna i queryn så får man alla inom det området.
+        /// Om inte alla 4 Parametrar anges, så returnerar responset alla Geo-comments istället.
+        /// </summary>
+        /// <param name="minLon"><para>Minsta värdet för longitud, Decimaltal</para></param>
+        /// <param name="minLat"><para>Minsta värdet för latitud, Decimaltal</para></param>
+        /// <param name="maxLon"><para>Högsta värdet för longitud, Decimaltal</para></param>
+        /// <param name="maxLat"><para>Högsta värdet för latitud, Decimaltal</para></param>
+        /// <returns> Returnerar alla geo-comments eller alla inom ett bestämt område</returns>
         // GET: api/v1/geo-comments
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GeoMessageV2Get>>> GetGeoMessages([FromQuery] double minLon, double minLat, double maxLon, double maxLat)
@@ -164,6 +192,13 @@ namespace v2
             return geoMessageV2List;
         }
 
+        /// <summary>
+        /// Ger en specifik geo-comment
+        /// </summary>
+        /// <param name="id">
+        /// <para>Heltal för att identifiera vilken geo-comment</para>
+        /// </param>
+        /// <returns>returnerar en specifik geo-comment</returns>
         // GET: api/v2/geo-comments/1
         [HttpGet("{id}")]
         public async Task<ActionResult<GeoMessageV2Get>> GetGeoMessage(int id)
@@ -192,6 +227,13 @@ namespace v2
             return Ok(geoMessageV2);
         }
 
+        /// <summary>
+        /// Lägger till en Geo-comment, som sätter Author till vilken användare som lägger till den
+        /// </summary>
+        /// <param name="geoMessage">
+        /// <para> Objekt för geoMessage </para>
+        /// </param>
+        /// <returns>Returnerar svar om det lyckades</returns>
         // POST: api/v2/geo-comments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize]
