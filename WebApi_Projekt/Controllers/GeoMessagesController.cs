@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApi_Projekt.Data;
 using WebApi_Projekt.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace v1
 {
@@ -18,6 +18,7 @@ namespace v1
     public class GeoMessagesController : ControllerBase
     {
         private readonly Context _context;
+
 
         public GeoMessagesController(Context context)
         {
